@@ -33,6 +33,7 @@ const urlencodedParser = express.urlencoded({
     extended: false
 });
 
+//create
 const create = (req, res) => {
     res.render('create', {
         title: 'Add Person'
@@ -58,6 +59,8 @@ const createPerson = async(req, res) => {
     res.redirect('/');
 }
 
+
+//edit
 const edit = async(req, res) => {
     console.log(req.query.id);
     await client.connect();
@@ -87,6 +90,7 @@ const editPerson = async(req, res) => {
     client.close();
 }
 
+//login
 const login = async(req, res) => {
     await client.connect();
     console.log("Name: ", req.body.name)
@@ -105,6 +109,7 @@ const login = async(req, res) => {
     }
 }
 
+//cookie
 const cookies = (req,res) => {
     // Cookie management
     var dateVisited;
@@ -126,7 +131,7 @@ const cookies = (req,res) => {
         lastVisit: 'First Visit: ' + dateVisited
     });
 };
-
+//logout
 const logout = (req, res) => {
     req.session.destroy(err => {
         if(err) {
@@ -139,6 +144,25 @@ const logout = (req, res) => {
     });
 };
 
+//api
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
+    next();
+});
+
+const api = async (req, res) => {
+    await client.connect();
+    const findResult = await collection.find({category: req.params.category}).toArray();
+    console.log("Found documents => ", findResult);
+    client.close();
+    res.json(findResult);
+    
+};
+
+
+
+app.get('/api', api)
 app.get('/', cookies);   
 app.post('/', urlencodedParser, login)
 app.get('/create', create);
