@@ -1,0 +1,39 @@
+extends layout 
+
+block content
+    form(id='form' method='post' action='/create')
+        label(for='name') Username: 
+        input(type='text' name='name')
+        br
+        label(for='password') Password:
+        input(type='text' name='password')
+        br
+        label(for='email') Email: 
+        input(type='text' name='email')
+        br
+        label(for='age') Age: 
+        input(type='text' name='age')
+        br
+        label(for='zeus') The name "Zeus" is related to the Greek word "dios". What is the meaning of this word?: 
+        select(name='zeus')
+            option(value='king') King 
+            option(value='Bright') Bright 
+            option(value='Master') Master
+            option(value='Weather') Weather
+        br
+        label(for='shiva') In which tradition is Shiva the Supreme Being who creates, protects and transforms?: 
+        select(name='shiva')
+            option(value='country') Country
+            option(value='war') War
+            option(value='family') Family
+            option(value='Weather') Shaivism
+        br
+        label(for='tsu') What is Tsukuyomi the god of?: 
+        select(name='tsu')
+            option(value='moon') Moon 
+            option(value='wind') Wind 
+            option(value='Sun') Sun
+            option(value='Night') Night
+        br
+        br
+        input(type='submit' value='Add Person')
