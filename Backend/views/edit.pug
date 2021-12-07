@@ -18,9 +18,9 @@ block content
         select(name='zeus')
             option(selected = person.zeus) #{person.zeus}
             option(value='king') King 
-            option(value='Bright') Bright 
-            option(value='Master') Master
-            option(value='Weather') Weather
+            option(value='bright') Bright 
+            option(value='master') Master
+            option(value='weather') Weather
         br
         label(for='shiva') In which tradition is Shiva the Supreme Being who creates, protects and transforms?: 
         select(name='shiva')
@@ -28,15 +28,15 @@ block content
             option(value='country') Country
             option(value='war') War
             option(value='family') Family
-            option(value='Weather') Shaivism
+            option(value='shaivism') Shaivism
         br
         label(for='tsu') What is Tsukuyomi the god of?: 
         select(name='tsu')
             option(selected = person.tsu) #{person.tsu}
             option(value='moon') Moon 
             option(value='wind') Wind 
-            option(value='Sun') Sun
-            option(value='Night') Night
+            option(value='sun') Sun
+            option(value='night') Night
         br
         input(type='submit' value='Update Person')
         br
