@@ -2,7 +2,7 @@ const canvas = document.getElementById('myCanvas');
 const ctx = canvas.getContext('2d');
 const url = `http://localhost:3000/api`
 
-canvas.width = 800;
+canvas.width = 1100;
 canvas.height = 600;
 let colors = ["#fde23e","#f16e23", "#57d9ff","#937e88"];
 
@@ -13,7 +13,7 @@ q1 = {
     master: 0,
     weather: 0,
     total: 0
-};
+}
 
 q2 = {
     name: 'Shiva',
@@ -86,71 +86,44 @@ fetch(url)
                 q3.total += 1
             }
         }
-        drawPieChart(data, colors)
-        
+        pieChart(200,200, q1)
+        pieChart(500,200, q2)
+        pieChart(800,200, q3)
     })
 
-    var drawPieChart = function(data, colors) {
-        var x = canvas.width / 3;
-            y = canvas.height / 3;
-        var color,
-            startAngle,
-            endAngle,
-            total = getTotal(data);
-        
-        for(var i=0; i<data.length; i++) {
-            color = colors[i];
-            startAngle = calculateStart(data, i, total);
-            endAngle = calculateEnd(data, i, total);
-            ctx.beginPath();
-            ctx.fillStyle = color;
-            ctx.moveTo(x, y);
-            ctx.arc(x, y, y-100, startAngle, endAngle);
-            ctx.fill();
-            ctx.rect(canvas.width - 200, y - i * 30, 12, 12);
-            ctx.fill();
-            ctx.font = "12px Verdana";
-          ctx.fillText(data[i].label + " - " + data[i].value , canvas.width - 200 + 20, y - i * 30 + 10);
+const pieSlice = (x, y, startAngle, totalAngle, color) => {
+    let size = 100;
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    ctx.ellipse(x, y, size, size, 0, startAngle*(Math.PI/180), totalAngle*(Math.PI/180));
+    ctx.closePath();
+    ctx.fill();
+}
+const pieChart = (x, y, question) => {
+    ctx.fillStyle = 'white'
+    ctx.font = '12pt Verdana'
+    let counter = 0;
+    let startAngle = 0;
+    for(let a in question){
+        if (a == 'name') {
+            ctx.fillText(question[a], x + 30 , y - 110)
+        } else if( a != 'total') {
+            pieSlice(x + 50, 200, startAngle, startAngle + angle(question[a], question['total']), colors[counter] )
+            chartLegend(x, (y + 200) + 30* counter, colors[counter], a, question[a])
+            startAngle += angle(question[a], question['total'])
+            counter++
         }
-    };
-    
-    
-    var getTotal = function(data) {
-        var sum = 0;
-        for(var i=0; i<data.length; i++) {
-            sum += data[i].value;
-        }
-            
-        return sum;
-    };
-    
-    var calculateStart = function(data, index, total) {
-        if(index === 0) {
-            return 0;
-        }
-        
-        return calculateEnd(data, index-1, total);
-    };
-    
-    var calculateEndAngle = function(data, index, total) {
-        var angle = data[index].value / total * 360;
-        var inc = ( index === 0 ) ? 0 : calculateEndAngle(data, index-1, total);
-        
-        return ( angle + inc );
-    };
-    
-    var calculateEnd = function(data, index, total) {
-        
-        return degreeToRadians(calculateEndAngle(data, index, total));
-    };
-    
-    var degreeToRadians = function(angle) {
-        return angle * Math.PI / 180
     }
-    
-    let data = [
-        {label: 'King' , value: q1.king},
-        {label: 'Bright' , value: q1.bright},
-        {label: 'Master' , value: q1.master},
-        {label: 'Weather' , value: q1.weather}
-    ];
+}
+
+const angle = (amount, total) => {
+    return Math.ceil(360*(amount / total))
+}
+
+const chartLegend = (x, y, color, label, value) => {
+    ctx.fillStyle = color;
+    ctx.fillRect(x, y, 20 , 20);
+    ctx.fillText(label + ' - ' + value, x + 30, y + 15)
+}
+
